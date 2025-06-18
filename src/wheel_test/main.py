@@ -20,10 +20,13 @@ def get_spark() -> SparkSession:
 def main(**kwargs):
     import argparse
 
+    print(kwargs)
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("--message")
-    args = parser.parse_args()
-    print(vars(args))
+    parser.add_argument("--message", default=kwargs.get("message"))
+    args = vars(parser.parse_args())
+
+    print(args["message"])
 
 
 if __name__ == "__main__":
