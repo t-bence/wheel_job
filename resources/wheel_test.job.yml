@@ -13,24 +13,21 @@ resources:
       email_notifications:
         on_failure:
           - toth.bence.mihaly@gmail.com
+      
+      environments:
+        - environment_key: Default
+          spec:
+            client: "2"
+            dependencies:
+              - ../dist/*.whl
+
+      performance_target: PERFORMANCE_OPTIMIZED
 
       tasks:
         - task_key: main_task
-          job_cluster_key: job_cluster
           python_wheel_task:
             package_name: wheel_test
             entry_point: main
-          libraries:
-            # By default we just include the .whl file generated for the wheel_test package.
-            # See https://docs.databricks.com/dev-tools/bundles/library-dependencies.html
-            # for more information on how to add other libraries.
-            - whl: ../dist/*.whl
-
-      job_clusters:
-        - job_cluster_key: job_cluster
-          new_cluster:
-            spark_version: 15.4.x-scala2.12
-            node_type_id: i3.xlarge
-            autoscale:
-                min_workers: 1
-                max_workers: 4
+            named_parameters:
+              message: "Hello world!"
+          environment_key: Default

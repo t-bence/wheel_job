@@ -1,4 +1,4 @@
-from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql import DataFrame, SparkSession
 
 
 def get_taxis(spark: SparkSession) -> DataFrame:
@@ -12,14 +12,19 @@ def get_spark() -> SparkSession:
     try:
         from databricks.connect import DatabricksSession
 
-        return DatabricksSession.builder.getOrCreate()
+        return DatabricksSession.builder.profile("private").serverless().getOrCreate()
     except ImportError:
         return SparkSession.builder.getOrCreate()
 
 
-def main():
-    get_taxis(get_spark()).show(5)
+def main(**kwargs):
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--message")
+    args = parser.parse_args()
+    print(vars(args))
 
 
 if __name__ == "__main__":
-    main()
+    main(message="Hello there")
